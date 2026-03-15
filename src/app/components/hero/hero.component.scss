@@ -1,0 +1,299 @@
+// ── Variables compartidas con FAQ ──────────────────────
+$oro:    #c9a96e;
+$oscuro: #1a1814;
+$claro:  #faf8f5;
+
+// ── Wrapper ────────────────────────────────────────────
+.hero-wrap {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 24px;
+  background: $oscuro;
+}
+
+// ── Foto de fondo ──────────────────────────────────────
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('C:/Users/alvar/Documents/boda-web/src/assets/foto-boda.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.45;
+
+  // Efecto parallax suave (opcional, actívalo en el .ts con HostListener)
+  will-change: transform;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba($oscuro, 0.3)  0%,
+    rgba($oscuro, 0.15) 40%,
+    rgba($oscuro, 0.6)  100%
+  );
+}
+
+// ── Navbar integrada en el hero ────────────────────────
+.navbar-sim {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 48px;
+  z-index: 10;
+
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba($claro, 0.9);
+    letter-spacing: 0.08em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    list-style: none;
+    margin: 0; padding: 0;
+
+    a {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba($claro, 0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover { color: $oro; }
+    }
+
+    .nav-rsvp {
+      border: 0.5px solid rgba($claro, 0.55);
+      padding: 8px 20px;
+      color: rgba($claro, 0.9) !important;
+      transition: background 0.3s, border-color 0.3s !important;
+
+      &:hover {
+        background: rgba($claro, 0.08);
+        border-color: $oro;
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    padding: 20px 20px;
+    .nav-links { display: none; }  // móvil: usa el hamburger del app.component
+  }
+}
+
+// ── Contenido central ──────────────────────────────────
+.hero-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  color: $claro;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: $oro;
+  margin: 0 0 24px;
+  animation: fadeUp 0.8s ease both;
+}
+
+.hero-names {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(44px, 7vw, 82px);
+  font-weight: 400;
+  line-height: 1.05;
+  margin: 0 0 10px;
+  animation: fadeUp 0.9s ease 0.1s both;
+
+  em {
+    font-style: italic;
+    color: $oro;
+  }
+}
+
+.hero-date {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba($claro, 0.55);
+  margin: 0 0 40px;
+  animation: fadeUp 1s ease 0.2s both;
+}
+
+// ── Separador ──────────────────────────────────────────
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 36px;
+  animation: fadeUp 1s ease 0.25s both;
+
+  &::before, &::after {
+    content: '';
+    width: 60px;
+    height: 0.5px;
+    background: rgba($oro, 0.5);
+  }
+
+  .divider-diamond {
+    width: 6px;
+    height: 6px;
+    background: $oro;
+    transform: rotate(45deg);
+    opacity: 0.8;
+  }
+}
+
+// ── Countdown ──────────────────────────────────────────
+.countdown-block {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 16px;
+  animation: fadeUp 1s ease 0.35s both;
+}
+
+.cd-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+
+  @media (max-width: 480px) { min-width: 60px; }
+}
+
+.cd-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 400;
+  color: $claro;
+  line-height: 1;
+  transition: transform 0.15s ease;
+
+  &.tick { transform: scale(1.08); }
+}
+
+.cd-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba($oro, 0.7);
+  margin-top: 8px;
+}
+
+.cd-sep {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: rgba($oro, 0.4);
+  line-height: 1;
+  margin-top: 4px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.cd-caption {
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  color: $oro;
+  margin: 0 0 44px;
+  animation: fadeUp 1s ease 0.4s both;
+}
+
+// ── CTA ────────────────────────────────────────────────
+.hero-cta {
+  display: inline-block;
+  border: 0.5px solid rgba($claro, 0.55);
+  color: $claro;
+  text-decoration: none;
+  padding: 14px 40px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: background 0.3s, border-color 0.3s;
+  animation: fadeUp 1s ease 0.5s both;
+
+  &:hover {
+    background: rgba($oro, 0.15);
+    border-color: $oro;
+  }
+}
+
+// ── Scroll hint ────────────────────────────────────────
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: fadeUp 1s ease 0.8s both;
+
+  span {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba($claro, 0.3);
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 32px;
+    background: rgba($oro, 0.3);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: $oro;
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+  }
+}
+
+// ── Animaciones ────────────────────────────────────────
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.9; }
+}
+
+@keyframes scrollDown {
+  0%   { top: -100%; }
+  100% { top: 100%; }
+}

@@ -1,0 +1,52 @@
+<div class="faq-page">
+
+  <!-- Hero superior -->
+  <div class="faq-hero">
+    <p class="eyebrow">La boda de</p>
+    <h1 class="hero-title">Álvaro <em>&amp;</em> Celia</h1>
+    <p class="hero-sub">Preguntas que te mueres por hacer — y respuestas honestas</p>
+  </div>
+
+  <!-- Cuerpo -->
+  <div class="faq-body">
+    <div class="section-label">Preguntas frecuentes</div>
+
+    <!-- Lista de preguntas -->
+    <div class="faq-list">
+      <div
+        *ngFor="let faq of faqs; let i = index"
+        class="faq-item"
+        [class.open]="faq.abierto"
+      >
+        <!-- Pregunta (cabecera clicable) -->
+        <div class="faq-question" (click)="toggle(i)">
+          <div class="q-left">
+            <span class="q-num">0{{ i + 1 }}</span>
+            <span class="q-text">{{ faq.pregunta }}</span>
+          </div>
+          <div class="chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Respuesta (se despliega) -->
+        <div class="faq-answer">
+          <div class="answer-inner">
+            <span class="a-label">R.</span>
+            <p class="a-text" [innerHTML]="faq.respuesta"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA al pie -->
+    <div class="footer-cta">
+      <p>¿Sigues con dudas existenciales?</p>
+      <span>Escríbenos · no prometemos responder rápido</span>
+    </div>
+
+  </div>
+</div>

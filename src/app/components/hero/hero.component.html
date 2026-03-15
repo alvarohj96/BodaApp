@@ -1,0 +1,55 @@
+<div class="hero-wrap">
+
+  <!-- Foto de fondo — pon tu imagen en /assets/foto-boda.jpg -->
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <!-- Contenido central -->
+  <div class="hero-content">
+
+    <p class="hero-eyebrow">05 · junio · 2027</p>
+
+    <h1 class="hero-names">Álvaro <em>&amp;</em> Celia</h1>
+    <p class="hero-date">La Granja, Segovia</p>
+
+    <!-- Separador ornamental -->
+    <div class="divider-ornament">
+      <div class="divider-diamond"></div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-block">
+      <div class="cd-unit">
+        <span class="cd-number">{{ dias }}</span>
+        <span class="cd-label">Días</span>
+      </div>
+      <span class="cd-sep">·</span>
+      <div class="cd-unit">
+        <span class="cd-number">{{ horas }}</span>
+        <span class="cd-label">Horas</span>
+      </div>
+      <span class="cd-sep">·</span>
+      <div class="cd-unit">
+        <span class="cd-number">{{ min }}</span>
+        <span class="cd-label">Min</span>
+      </div>
+      <span class="cd-sep">·</span>
+      <div class="cd-unit">
+        <span class="cd-number" [class.tick]="segPulse">{{ seg }}</span>
+        <span class="cd-label">Seg</span>
+      </div>
+    </div>
+
+    <p class="cd-caption">para la catástrofe... digo, para la fiesta</p>
+
+    <a routerLink="/rsvp" class="hero-cta">Confirmar asistencia</a>
+
+  </div>
+
+  <!-- Indicador de scroll -->
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+
+</div>

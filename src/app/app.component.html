@@ -1,0 +1,23 @@
+<div class="app-wrapper">
+
+  <!-- Navbar fija y transparente como en la imagen -->
+  <nav class="navbar" [class.menu-open]="menuAbierto">
+    <a routerLink="/" class="navbar-brand">Celia & Álvaro</a>
+
+    <button class="hamburger" (click)="toggleMenu()">☰</button>
+
+    <ul class="nav-links" [class.active]="menuAbierto">
+      <li><a routerLink="/historia"  routerLinkActive="active" (click)="menuAbierto=false">Nuestra Historia</a></li>
+      <li><a routerLink="/corte"     routerLinkActive="active" (click)="menuAbierto=false">Horario</a></li>
+      <li><a routerLink="/faq"       routerLinkActive="active" (click)="menuAbierto=false">FAQ</a></li>
+      <li><a routerLink="/mapa"      routerLinkActive="active" (click)="menuAbierto=false">Lugar</a></li>
+      <li><a routerLink="/rsvp" class="btn-rsvp" (click)="menuAbierto=false">RSVP</a></li>
+    </ul>
+  </nav>
+
+  <!-- Aquí se inyecta cada página -->
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
