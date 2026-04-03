@@ -57,7 +57,7 @@
             </div>
             <button type="button" class="pax-btn" (click)="cambiarPersonas(-1)" [disabled]="personas <= 1">−</button>
             <span class="pax-num">{{ personas }}</span>
-            <button type="button" class="pax-btn" (click)="cambiarPersonas(1)" [disabled]="personas >= 15">+</button>
+            <button type="button" class="pax-btn" (click)="cambiarPersonas(1)" [disabled]="personas >= 4">+</button>
             <span class="pax-label">
               {{ personas === 1 ? 'adulto' : 'adultos' }}
             </span>

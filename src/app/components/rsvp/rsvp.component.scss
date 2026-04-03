@@ -177,7 +177,7 @@ $oro: #a8ba8c;
 // ── Grid de asistencia ─────────────────────────────────
 .asistencia-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 
   @media (max-width: 400px) {
