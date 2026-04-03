@@ -4,7 +4,7 @@ import { HistoriaComponent } from './components/historia/historia.component';
 import { CountdownComponent } from './components/countdown/countdown.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { MapaComponent } from './components/mapa/mapa.component';
-import { RsvpComponent } from './components/rsvp/rsvp';
+import { RsvpComponent } from './components/rsvp/rsvp.component';
 
 export const routes: Routes = [
   { path: '',        component: HeroComponent },

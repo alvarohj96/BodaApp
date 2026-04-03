@@ -1,0 +1,141 @@
+<div class="rsvp-page">
+
+  <!-- Hero -->
+  <div class="rsvp-hero">
+    <p class="eyebrow">Álvaro &amp; Celia · 05 junio 2027</p>
+    <h1><em>¿Nos acompañas?</em></h1>
+    <p class="hero-sub">La Granja · Segovia</p>
+  </div>
+
+  <div class="rsvp-body">
+    <div class="section-label">Confirmación de asistencia</div>
+
+    <!-- ── Formulario ────────────────────────────────── -->
+    <div class="form-card" *ngIf="estado !== 'enviado'">
+      <form [formGroup]="form" (ngSubmit)="enviar()">
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label class="form-label" for="nombre">Tu nombre completo</label>
+          <input class="form-input" id="nombre" type="text" formControlName="nombre"
+            placeholder="Como aparece en la invitación"
+            [class.error]="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+          <span class="form-error" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+            Necesitamos saber quién viene 😊
+          </span>
+        </div>
+
+        <!-- Asistencia -->
+        <div class="form-group">
+          <label class="form-label">¿Vienes a la fiesta?</label>
+          <div class="asistencia-grid">
+            <div class="asistencia-option" *ngFor="let op of opcionesAsistencia">
+              <input type="radio" [id]="'a-' + op.value" formControlName="asistencia" [value]="op.value">
+              <label class="asistencia-label" [for]="'a-' + op.value">
+                <span class="asistencia-icon" [ngClass]="op.iconClass">
+                  {{ op.icon }}
+                </span>
+                <span class="asistencia-title">{{ op.title }}</span>
+                <span class="asistencia-sub">{{ op.sub }}</span>
+              </label>
+            </div>
+          </div>
+          <span class="form-error" *ngIf="form.get('asistencia')?.invalid && form.get('asistencia')?.touched">
+            ¡Dinos si vienes o no! 😄
+          </span>
+        </div>
+
+        <!-- Número de personas y niños -->
+        <div class="form-group">
+          <label class="form-label">¿Cuántos venís?</label>
+
+          <!-- Adultos -->
+          <div class="pax-row">
+            <div class="pax-type-label">
+              <span class="pax-type-icon">👤</span>
+              <span class="pax-type-text">Adultos</span>
+            </div>
+            <button type="button" class="pax-btn" (click)="cambiarPersonas(-1)" [disabled]="personas <= 1">−</button>
+            <span class="pax-num">{{ personas }}</span>
+            <button type="button" class="pax-btn" (click)="cambiarPersonas(1)" [disabled]="personas >= 15">+</button>
+            <span class="pax-label">
+              {{ personas === 1 ? 'adulto' : 'adultos' }}
+            </span>
+          </div>
+
+          <!-- Separador -->
+          <div class="pax-divider"></div>
+
+          <!-- Niños -->
+          <div class="pax-row">
+            <div class="pax-type-label">
+              <span class="pax-type-icon">🧒</span>
+              <span class="pax-type-text">Niños</span>
+            </div>
+            <button type="button" class="pax-btn" (click)="cambiarNinos(-1)" [disabled]="ninos <= 0">−</button>
+            <span class="pax-num">{{ ninos }}</span>
+            <button type="button" class="pax-btn" (click)="cambiarNinos(1)" [disabled]="ninos >= 2">+</button>
+            <span class="pax-label">
+              {{ ninos === 0 ? 'sin niños' : ninos === 1 ? 'niño' : 'niños' }}
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Restricciones alimentarias -->
+        <div class="form-group">
+          <label class="form-label">Restricciones alimentarias</label>
+          <div class="alergias-chips">
+            <span *ngFor="let a of alergias" class="chip-label" [class.active]="tieneAlergia(a.id)"
+              (click)="toggleAlergia(a.id)">{{ a.label }}</span>
+          </div>
+        </div>
+
+        <!-- Mensaje libre -->
+        <div class="form-group">
+          <label class="form-label" for="mensaje">
+            ¿Algo más que debamos saber?
+          </label>
+          <textarea class="form-textarea" id="mensaje" formControlName="mensaje"
+            placeholder="Intolerancias, necesidades especiales, tu canción para el DJ..."></textarea>
+        </div>
+
+        <!-- Separador -->
+        <div class="divider-mini">
+          <div class="diamond-mini"></div>
+        </div>
+
+        <!-- Botón enviar -->
+        <button type="submit" class="submit-btn" [disabled]="estado === 'enviando'">
+          <span *ngIf="estado !== 'enviando'">Confirmar asistencia</span>
+          <span *ngIf="estado === 'enviando'" class="sending-dots">
+            Enviando
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+          </span>
+        </button>
+
+        <!-- Error de envío -->
+        <span class="form-error center" *ngIf="estado === 'error'">
+          Algo fue mal 😅 Inténtalo de nuevo o escríbenos directamente.
+        </span>
+
+      </form>
+    </div>
+
+    <!-- ── Pantalla de éxito ───────────────────────── -->
+    <div class="success-card" *ngIf="estado === 'enviado'">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+      <h2 class="success-title">
+        ¡Apuntado, <em>{{ nombreEnviado }}</em>!
+      </h2>
+      <p class="success-text">{{ mensajeExito }}</p>
+    </div>
+
+  </div>
+</div>
