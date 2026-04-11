@@ -28,3 +28,11 @@ export interface MapLocation {
   descripcionDivertida: string;
   icono: string;
 }
+
+export interface Invitado {
+  id: string;
+  nombre: string;
+  apellidos: string;
+  tieneAcompanante: boolean;
+  nombreAcompanante?: string;
+}

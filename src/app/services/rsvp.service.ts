@@ -1,35 +1,59 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 export interface RsvpData {
-  nombre: string;
-  asistencia: string;
-  personas: number;
-  ninos: number;
+  nombre:        string;
+  asistencia:    string;
   restricciones: string[];
-  mensaje: string;
+  mensaje:       string;
+  ninos:         number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class RsvpService {
 
-  private readonly SHEET_URL = 'https://script.google.com/macros/s/AKfycbz7LNYKoeiiWmCzUqS3GNQLLlG36AODfEhhRB7YC5EES7z3UaQoSsxUAsu46VQcelA1/exec';
+  private readonly SHEET_URL = 'https://script.google.com/macros/s/AKfycbwV6rO_l6rwimgd5dZKjYmlsrYQrfJtPbB7mt8tDE4uBPnHAmoYe1QlOny744eH-G6q/exec';
 
-  constructor(private http: HttpClient) { }
+  enviarRsvpRaw(data: Record<string, string>): Observable<any> {
+    // Usamos un <form> invisible que hace submit directo a Google
+    // Esto evita completamente el CORS porque no es una petición XHR
+    return from(this.enviarConForm(data));
+  }
 
-  enviarRsvp(data: RsvpData): Observable<any> {
-    const params = new HttpParams()
-      .set('nombre', data.nombre)
-      .set('asistencia', data.asistencia)
-      .set('personas', String(data.personas))
-      .set('ninos', String(data.ninos))
-      .set('restricciones', data.restricciones.join(', ') || 'Ninguna')
-      .set('mensaje', data.mensaje);
+  private enviarConForm(data: Record<string, string>): Promise<void> {
+    return new Promise((resolve) => {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = this.SHEET_URL;
+      form.target = 'hidden-iframe'; // envía a un iframe invisible
 
-    return this.http.post(this.SHEET_URL, params.toString(), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      responseType: 'text'
+      // Crea un campo por cada dato
+      Object.entries(data).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = key;
+        input.value = value ?? '';
+        form.appendChild(input);
+      });
+
+      // Crea el iframe invisible que recibe la respuesta
+      const iframe = document.createElement('iframe');
+      iframe.name  = 'hidden-iframe';
+      iframe.style.display = 'none';
+
+      // Cuando el iframe carga = el form se envió correctamente
+      iframe.onload = () => {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+        resolve();
+      };
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(form);
+      form.submit();
+
+      // Timeout de seguridad por si onload no dispara
+      setTimeout(() => resolve(), 3000);
     });
   }
 }

@@ -1,130 +1,203 @@
 <div class="rsvp-page">
 
-  <!-- Hero -->
   <div class="rsvp-hero">
     <p class="eyebrow">Álvaro &amp; Celia · 05 junio 2027</p>
-    <h1><em>¿Nos acompañas?</em></h1>
+    <h1>¿Nos acompañas <em>?</em></h1>
     <p class="hero-sub">La Granja · Segovia</p>
   </div>
 
   <div class="rsvp-body">
     <div class="section-label">Confirmación de asistencia</div>
 
-    <!-- ── Formulario ────────────────────────────────── -->
+    <!-- ── Formulario ──────────────────────────────────── -->
     <div class="form-card" *ngIf="estado !== 'enviado'">
-      <form [formGroup]="form" (ngSubmit)="enviar()">
+      <form (ngSubmit)="enviar()">
 
-        <!-- Nombre -->
+        <!-- PASO 1 — Buscar nombre -->
         <div class="form-group">
-          <label class="form-label" for="nombre">Tu nombre completo</label>
-          <input class="form-input" id="nombre" type="text" formControlName="nombre"
-            placeholder="Como aparece en la invitación"
-            [class.error]="form.get('nombre')?.invalid && form.get('nombre')?.touched">
-          <span class="form-error" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
-            Necesitamos saber quién viene 😊
-          </span>
-        </div>
+          <label class="form-label">Busca tu nombre</label>
 
-        <!-- Asistencia -->
-        <div class="form-group">
-          <label class="form-label">¿Vienes a la fiesta?</label>
-          <div class="asistencia-grid">
-            <div class="asistencia-option" *ngFor="let op of opcionesAsistencia">
-              <input type="radio" [id]="'a-' + op.value" formControlName="asistencia" [value]="op.value">
-              <label class="asistencia-label" [for]="'a-' + op.value">
-                <span class="asistencia-icon" [ngClass]="op.iconClass">
-                  {{ op.icon }}
+          <div class="search-wrapper">
+            <!-- Campo de búsqueda o nombre seleccionado -->
+            <div class="search-selected" *ngIf="invitadoSeleccionado; else searchInput">
+              <span class="selected-name">
+                {{ invitadoSeleccionado.nombre }} {{ invitadoSeleccionado.apellidos }}
+              </span>
+              <button type="button" class="clear-btn" (click)="limpiarSeleccion()">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <ng-template #searchInput>
+              <input class="form-input" type="text" [value]="busqueda" (input)="onBusqueda($event)"
+                (blur)="cerrarSugerencias()" placeholder="Escribe tu nombre..." autocomplete="off">
+            </ng-template>
+
+            <!-- Desplegable de sugerencias -->
+            <div class="sugerencias" *ngIf="mostrarSugerencias">
+              <div class="sugerencia-item" *ngFor="let inv of sugerencias" (mousedown)="seleccionarInvitado(inv)">
+                <span class="sug-nombre">{{ inv.nombre }} {{ inv.apellidos }}</span>
+                <span class="sug-acomp" *ngIf="inv.tieneAcompanante">
+                  + {{ inv.nombreAcompanante }}
                 </span>
-                <span class="asistencia-title">{{ op.title }}</span>
-                <span class="asistencia-sub">{{ op.sub }}</span>
+              </div>
+              <div class="sugerencias-empty" *ngIf="sugerencias.length === 0">
+                No encontramos ese nombre
+              </div>
+            </div>
+          </div>
+
+          <p class="form-hint">
+            Escribe solo tu nombre de pila para ver las opciones
+          </p>
+        </div>
+
+        <!-- PASO 2 — Formulario del invitado (solo si hay selección) -->
+        <ng-container *ngIf="invitadoSeleccionado">
+
+          <!-- Separador con nombre -->
+          <div class="invitado-header">
+            <div class="invitado-avatar">
+              {{ invitadoSeleccionado.nombre[0] }}{{ invitadoSeleccionado.apellidos[0] }}
+            </div>
+            <div>
+              <p class="invitado-nombre">
+                {{ invitadoSeleccionado.nombre }} {{ invitadoSeleccionado.apellidos }}
+              </p>
+              <p class="invitado-sub" *ngIf="invitadoSeleccionado.tieneAcompanante">
+                Con acompañante: {{ invitadoSeleccionado.nombreAcompanante }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Asistencia invitado principal -->
+          <div class="form-group" [formGroup]="form">
+            <label class="form-label">¿Vienes a la fiesta?</label>
+            <div class="asistencia-grid">
+              <div class="asistencia-option" *ngFor="let op of opcionesAsistencia">
+                <input type="radio" [id]="'a-'+op.value" formControlName="asistencia" [value]="op.value">
+                <label class="asistencia-label" [for]="'a-'+op.value">
+                  <span class="asistencia-icon" [ngClass]="op.iconClass">{{ op.icon }}</span>
+                  <span class="asistencia-title">{{ op.title }}</span>
+                  <span class="asistencia-sub">{{ op.sub }}</span>
+                </label>
+              </div>
+            </div>
+            <span class="form-error" *ngIf="form.get('asistencia')?.invalid && form.get('asistencia')?.touched">
+              ¡Dinos si vienes o no! 😄
+            </span>
+          </div>
+
+          <!-- Alergias invitado principal -->
+          <div class="form-group" [formGroup]="form">
+            <label class="form-label">Restricciones alimentarias</label>
+            <div class="alergias-chips">
+              <span *ngFor="let a of alergias" class="chip-label" [class.active]="tieneAlergia(a.id)"
+                (click)="toggleAlergia(a.id)"> {{ a.label }} </span>
+            </div>
+          </div>
+
+          <!-- Mensaje invitado principal -->
+          <div class="form-group" [formGroup]="form">
+            <label class="form-label">¿Algo más que debamos saber?</label>
+            <textarea class="form-textarea" formControlName="mensaje"
+              placeholder="Canción para el DJ, necesidades especiales...">
+            </textarea>
+          </div>
+
+          <!-- ── Sección acompañante ─────────────────── -->
+          <ng-container *ngIf="invitadoSeleccionado.tieneAcompanante">
+
+            <div class="acomp-divider">
+              <div class="acomp-divider-line"></div>
+              <span class="acomp-divider-label">Acompañante</span>
+              <div class="acomp-divider-line"></div>
+            </div>
+
+            <div class="acomp-header">
+              <div class="invitado-avatar acomp">
+                {{ invitadoSeleccionado.nombreAcompanante![0] }}
+              </div>
+              <p class="invitado-nombre">{{ invitadoSeleccionado.nombreAcompanante }}</p>
+            </div>
+
+            <!-- Toggle para rellenar datos del acompañante -->
+            <div class="acomp-toggle-row">
+              <label class="toggle-track">
+                <input type="checkbox" [(ngModel)]="rellenarAcompanante" [ngModelOptions]="{standalone: true}">
+                <span class="toggle-thumb"></span>
               </label>
+              <span class="toggle-label">
+                {{ rellenarAcompanante ? 'Rellenando datos' : 'Rellenar datos del acompañante' }}
+              </span>
             </div>
+
+            <ng-container *ngIf="rellenarAcompanante">
+
+              <!-- Asistencia acompañante -->
+              <div class="form-group" [formGroup]="formAcompanante">
+                <label class="form-label">¿Viene {{ invitadoSeleccionado.nombreAcompanante }}?</label>
+                <div class="asistencia-grid">
+                  <div class="asistencia-option" *ngFor="let op of opcionesAsistencia">
+                    <input type="radio" [id]="'ac-'+op.value" formControlName="asistencia" [value]="op.value">
+                    <label class="asistencia-label" [for]="'ac-'+op.value">
+                      <span class="asistencia-icon" [ngClass]="op.iconClass">{{ op.icon }}</span>
+                      <span class="asistencia-title">{{ op.title }}</span>
+                      <span class="asistencia-sub">{{ op.sub }}</span>
+                    </label>
+                  </div>
+                </div>
+                <span class="form-error"
+                  *ngIf="formAcompanante.get('asistencia')?.invalid && formAcompanante.get('asistencia')?.touched">
+                  ¡Dinos si viene o no! 😄
+                </span>
+              </div>
+
+              <!-- Alergias acompañante -->
+              <div class="form-group" [formGroup]="formAcompanante">
+                <label class="form-label">Restricciones alimentarias</label>
+                <div class="alergias-chips">
+                  <span *ngFor="let a of alergias" class="chip-label" [class.active]="tieneAlergia(a.id, true)"
+                    (click)="toggleAlergia(a.id, true)">{{ a.label }}</span>
+                </div>
+              </div>
+
+              <!-- Mensaje acompañante -->
+              <div class="form-group" [formGroup]="formAcompanante">
+                <label class="form-label">¿Algo más del acompañante?</label>
+                <textarea class="form-textarea" formControlName="mensaje"
+                  placeholder="Necesidades especiales, alergias no listadas...">
+                </textarea>
+              </div>
+
+            </ng-container>
+          </ng-container>
+
+          <!-- Separador y botón -->
+          <div class="divider-mini">
+            <div class="diamond-mini"></div>
           </div>
-          <span class="form-error" *ngIf="form.get('asistencia')?.invalid && form.get('asistencia')?.touched">
-            ¡Dinos si vienes o no! 😄
-          </span>
-        </div>
 
-        <!-- Número de personas y niños -->
-        <div class="form-group">
-          <label class="form-label">¿Cuántos venís?</label>
-
-          <!-- Adultos -->
-          <div class="pax-row">
-            <div class="pax-type-label">
-              <span class="pax-type-icon">👤</span>
-              <span class="pax-type-text">Adultos</span>
-            </div>
-            <button type="button" class="pax-btn" (click)="cambiarPersonas(-1)" [disabled]="personas <= 1">−</button>
-            <span class="pax-num">{{ personas }}</span>
-            <button type="button" class="pax-btn" (click)="cambiarPersonas(1)" [disabled]="personas >= 4">+</button>
-            <span class="pax-label">
-              {{ personas === 1 ? 'adulto' : 'adultos' }}
+          <button type="submit" class="submit-btn" [disabled]="estado === 'enviando'">
+            <span *ngIf="estado !== 'enviando'">Confirmar asistencia</span>
+            <span *ngIf="estado === 'enviando'" class="sending-dots">
+              Enviando
+              <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
             </span>
-          </div>
+          </button>
 
-          <!-- Separador -->
-          <div class="pax-divider"></div>
-
-          <!-- Niños -->
-          <div class="pax-row">
-            <div class="pax-type-label">
-              <span class="pax-type-icon">🧒</span>
-              <span class="pax-type-text">Niños</span>
-            </div>
-            <button type="button" class="pax-btn" (click)="cambiarNinos(-1)" [disabled]="ninos <= 0">−</button>
-            <span class="pax-num">{{ ninos }}</span>
-            <button type="button" class="pax-btn" (click)="cambiarNinos(1)" [disabled]="ninos >= 2">+</button>
-            <span class="pax-label">
-              {{ ninos === 0 ? 'sin niños' : ninos === 1 ? 'niño' : 'niños' }}
-            </span>
-          </div>
-
-        </div>
-
-        <!-- Restricciones alimentarias -->
-        <div class="form-group">
-          <label class="form-label">Restricciones alimentarias</label>
-          <div class="alergias-chips">
-            <span *ngFor="let a of alergias" class="chip-label" [class.active]="tieneAlergia(a.id)"
-              (click)="toggleAlergia(a.id)">{{ a.label }}</span>
-          </div>
-        </div>
-
-        <!-- Mensaje libre -->
-        <div class="form-group">
-          <label class="form-label" for="mensaje">
-            ¿Algo más que debamos saber?
-          </label>
-          <textarea class="form-textarea" id="mensaje" formControlName="mensaje"
-            placeholder="Intolerancias, necesidades especiales, tu canción para el DJ..."></textarea>
-        </div>
-
-        <!-- Separador -->
-        <div class="divider-mini">
-          <div class="diamond-mini"></div>
-        </div>
-
-        <!-- Botón enviar -->
-        <button type="submit" class="submit-btn" [disabled]="estado === 'enviando'">
-          <span *ngIf="estado !== 'enviando'">Confirmar asistencia</span>
-          <span *ngIf="estado === 'enviando'" class="sending-dots">
-            Enviando
-            <span class="dot">.</span>
-            <span class="dot">.</span>
-            <span class="dot">.</span>
+          <span class="form-error center" *ngIf="estado === 'error'">
+            Algo fue mal 😅 Inténtalo de nuevo o escríbenos directamente.
           </span>
-        </button>
 
-        <!-- Error de envío -->
-        <span class="form-error center" *ngIf="estado === 'error'">
-          Algo fue mal 😅 Inténtalo de nuevo o escríbenos directamente.
-        </span>
-
+        </ng-container>
       </form>
     </div>
 
-    <!-- ── Pantalla de éxito ───────────────────────── -->
+    <!-- ── Pantalla de éxito ────────────────────────── -->
     <div class="success-card" *ngIf="estado === 'enviado'">
       <div class="success-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -132,7 +205,7 @@
         </svg>
       </div>
       <h2 class="success-title">
-        ¡Apuntado, <em>{{ nombreEnviado }}</em>!
+        ¡Apuntado, <em>{{ invitadoSeleccionado?.nombre }}</em>!
       </h2>
       <p class="success-text">{{ mensajeExito }}</p>
     </div>
