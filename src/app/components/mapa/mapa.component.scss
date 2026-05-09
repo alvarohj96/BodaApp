@@ -1,0 +1,261 @@
+$verde-oscuro:  #2e3a1a;
+$verde-medio:   #627830;
+$verde-claro:   #a8ba8c;
+$verde-fondo:   #dde5d0;
+$crema:         #f5f2ea;
+$crema-oscura:  #f0ece0;
+$texto:         #2e3a1a;
+$texto-muted:   #5a5a4a;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.lugar-page {
+  font-family: 'Lato', sans-serif;
+  background: $verde-fondo;
+  min-height: 100vh;
+}
+
+// ── Hero ───────────────────────────────────────────────
+.lugar-hero {
+  background: $verde-oscuro;
+  text-align: center;
+  padding: 100px 40px 72px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+    );
+  }
+
+  .eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4em;
+    text-transform: uppercase; color: $verde-claro; margin: 0 0 18px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 400;
+    color: $crema-oscura; line-height: 1.1; margin: 0 0 12px;
+
+    em { font-style: italic; color: $verde-claro; }
+  }
+
+  .hero-sub {
+    font-size: 13px; font-weight: 300; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba($crema-oscura, 0.5);
+  }
+}
+
+// ── Cuerpo ─────────────────────────────────────────────
+.lugar-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+
+// ── Section label (igual que FAQ y RSVP) ───────────────
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.35em;
+  text-transform: uppercase; color: $verde-medio;
+  display: flex; align-items: center; gap: 12px; margin: 0 0 28px;
+
+  &::after {
+    content: ''; flex: 1; height: 0.5px;
+    background: $verde-claro; opacity: 0.5;
+  }
+}
+
+// ── Venue card ─────────────────────────────────────────
+.venue-card {
+  background: $crema;
+  border-radius: 20px;
+  border: 0.5px solid rgba(90, 110, 50, 0.15);
+  overflow: hidden;
+}
+
+.venue-img-wrap {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+
+  @media (max-width: 480px) { height: 200px; }
+}
+
+.venue-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.venue-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba($verde-oscuro, 0.5));
+}
+
+.venue-img-badge {
+  position: absolute;
+  bottom: 16px; left: 20px;
+  background: $crema;
+  color: $verde-oscuro;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.venue-info {
+  padding: 28px 32px 32px;
+
+  @media (max-width: 480px) { padding: 20px; }
+}
+
+.venue-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 400;
+  color: $verde-oscuro; margin: 0 0 10px;
+}
+
+.venue-dir {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; font-weight: 300; color: $texto-muted;
+  margin: 0 0 14px; line-height: 1.5;
+
+  .dir-icon { flex-shrink: 0; font-size: 14px; }
+}
+
+.venue-desc {
+  font-size: 14px; font-weight: 300; color: $texto-muted;
+  line-height: 1.7; font-style: italic;
+  margin: 0 0 24px;
+  padding-left: 22px;
+  border-left: 2px solid rgba($verde-claro, 0.5);
+}
+
+// ── Botones ────────────────────────────────────────────
+.venue-actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 10px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+  border: none;
+
+  svg { width: 16px; height: 16px; flex-shrink: 0; }
+}
+
+.btn-primary {
+  background: $verde-oscuro; color: $crema-oscura;
+  &:hover { background: #3d4f24; }
+}
+
+.btn-secondary {
+  background: transparent; color: $verde-oscuro;
+  border: 0.5px solid rgba(90, 110, 50, 0.35);
+  &:hover { background: rgba(90, 110, 50, 0.08); }
+}
+
+// ── Mapa iframe ────────────────────────────────────────
+.mapa-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid rgba(90, 110, 50, 0.2);
+  background: $crema;
+
+  iframe { display: block; }
+}
+
+// ── Parking card ───────────────────────────────────────
+.parking-card {
+  background: $crema;
+  border-radius: 20px;
+  border: 0.5px solid rgba(90, 110, 50, 0.15);
+  padding: 28px 32px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    padding: 20px;
+    gap: 14px;
+  }
+}
+
+.parking-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  background: #eef3e5;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.parking-info { flex: 1; }
+
+.parking-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 400;
+  color: $verde-oscuro; margin: 0 0 6px;
+}
+
+.parking-dir {
+  font-size: 13px; font-weight: 300; color: $texto-muted;
+  margin: 0 0 8px; line-height: 1.5;
+}
+
+.parking-nota {
+  font-size: 13px; font-weight: 300; color: $texto-muted;
+  font-style: italic; margin: 0 0 20px;
+}
+
+// ── Info grid ──────────────────────────────────────────
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 540px) { grid-template-columns: 1fr; }
+}
+
+.info-card {
+  background: $crema;
+  border-radius: 14px;
+  border: 0.5px solid rgba(90, 110, 50, 0.15);
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.info-icono {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.info-titulo {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: $verde-medio; margin: 0 0 6px;
+}
+
+.info-texto {
+  font-size: 13px; font-weight: 300;
+  color: $texto-muted; line-height: 1.6; margin: 0;
+}
+
+// ── Responsive ─────────────────────────────────────────
+@media (max-width: 600px) {
+  .lugar-body { padding: 40px 16px 60px; }
+}

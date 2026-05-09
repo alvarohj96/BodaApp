@@ -1,1 +1,100 @@
-<p>mapa works!</p>
+<div class="lugar-page">
+
+  <!-- Hero -->
+  <div class="lugar-hero">
+    <p class="eyebrow">05 · junio · 2027</p>
+    <h1>El <em>lugar</em></h1>
+    <p class="hero-sub">La Granja · Segovia</p>
+  </div>
+
+  <div class="lugar-body">
+    <div class="section-label">Dónde nos casamos</div>
+
+    <!-- Tarjeta principal del venue -->
+    <div class="venue-card">
+      <div class="venue-img-wrap">
+        <img
+          src="https://lh3.googleusercontent.com/places/ANXAkqF4Aqyi_v5a6xh8sCQFaYrTyDN7TRAK2QJo3xs2BCoscLZ8glc59k-h0MwlSQAOX_pSgR0KTxeEf7nNjEwhM0on-V7DJBG1EfY=s4800-w800-h600"
+          alt="Real Fábrica de Cristales de La Granja"
+          class="venue-img"
+        >
+        <div class="venue-img-overlay"></div>
+        <div class="venue-img-badge">💍 Aquí es</div>
+      </div>
+
+      <div class="venue-info">
+        <h2 class="venue-nombre">{{ lugar.nombre }}</h2>
+        <p class="venue-dir">
+          <span class="dir-icon">📍</span>
+          {{ lugar.direccion }}
+        </p>
+        <p class="venue-desc">{{ lugar.descripcion }}</p>
+
+        <div class="venue-actions">
+          <button class="btn-primary" (click)="abrirMapa(lugar.googleMaps)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            Google Maps
+          </button>
+          <button class="btn-secondary" (click)="abrirMapa(lugar.waze)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+            Waze
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aparcamiento -->
+    <div class="section-label" style="margin-top: 48px;">Aparcamiento</div>
+    <div class="parking-card">
+      <div class="parking-icon">🅿️</div>
+      <div class="parking-info">
+        <h3 class="parking-nombre">{{ aparcamiento.nombre }}</h3>
+        <p class="parking-dir">{{ aparcamiento.direccion }}</p>
+        <p class="parking-nota">{{ aparcamiento.nota }}</p>
+        <div class="venue-actions">
+          <button class="btn-primary" (click)="abrirMapa(aparcamiento.googleMaps)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            Google Maps
+          </button>
+          <button class="btn-secondary" (click)="abrirMapa(aparcamiento.waze)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+            Waze
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info práctica -->
+    <div class="section-label" style="margin-top: 48px;">Información práctica</div>
+    <div class="info-grid">
+      <div class="info-card" *ngFor="let item of info">
+        <span class="info-icono">{{ item.icono }}</span>
+        <div>
+          <p class="info-titulo">{{ item.titulo }}</p>
+          <p class="info-texto">{{ item.texto }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
