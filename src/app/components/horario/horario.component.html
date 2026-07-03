@@ -1,0 +1,36 @@
+<div class="horario-page">
+
+  <div class="horario-hero">
+    <p class="eyebrow">05 · junio · 2027</p>
+    <h1 class="hero-title">El <em>horario</em></h1>
+    <p class="hero-sub">La Granja · Segovia</p>
+  </div>
+
+  <div class="horario-body">
+    <div class="section-label">El día</div>
+
+    <div class="timeline">
+      <div
+        *ngFor="let ev of eventos"
+        class="timeline-item"
+        [class.highlight]="ev.highlight"
+      >
+        <div class="timeline-dot"></div>
+
+        <div class="timeline-icon">{{ ev.icono }}</div>
+
+        <div class="timeline-content">
+          <p class="timeline-hora">{{ ev.hora }}</p>
+          <p class="timeline-nombre">{{ ev.nombre }}</p>
+          <p class="timeline-desc">{{ ev.desc }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-cta">
+      <p>Los horarios son orientativos</p>
+      <span>Las bodas tienen su propio ritmo · y nosotros también</span>
+    </div>
+
+  </div>
+</div>
