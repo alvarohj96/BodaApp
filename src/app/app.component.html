@@ -8,8 +8,9 @@
 
     <ul class="nav-links" [class.active]="menuAbierto">
       <li><a routerLink="/horario"     routerLinkActive="active" (click)="menuAbierto=false">Horario</a></li>
-      <li><a routerLink="/faq"       routerLinkActive="active" (click)="menuAbierto=false">FAQ</a></li>
       <li><a routerLink="/mapa"      routerLinkActive="active" (click)="menuAbierto=false">Lugar</a></li>
+      <li><a routerLink="/alojamientos" routerLinkActive="active">Alojamientos</a></li>  <!-- ← nuevo -->
+      <li><a routerLink="/faq"       routerLinkActive="active" (click)="menuAbierto=false">FAQ</a></li>
     </ul>
   </nav>
 

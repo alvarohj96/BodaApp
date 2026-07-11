@@ -1,0 +1,215 @@
+$verde-oscuro: #2e3a1a;
+$verde-medio:  #627830;
+$verde-claro:  #a8ba8c;
+$verde-fondo:  #dde5d0;
+$crema:        #f5f2ea;
+$crema-oscura: #f0ece0;
+$texto:        #2e3a1a;
+$texto-muted:  #5a5a4a;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.alojamientos-page {
+  font-family: 'Lato', sans-serif;
+  background: $verde-fondo;
+  min-height: 100vh;
+}
+
+// ── Hero ───────────────────────────────────────────────
+.alojamientos-hero {
+  background: $verde-oscuro;
+  text-align: center;
+  padding: 100px 40px 72px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+    );
+  }
+
+  .eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4em;
+    text-transform: uppercase; color: $verde-claro; margin: 0 0 18px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 400;
+    color: $crema-oscura; line-height: 1.1; margin: 0 0 12px;
+
+    em { font-style: italic; color: $verde-claro; }
+  }
+
+  .hero-sub {
+    font-size: 13px; font-weight: 300; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba($crema-oscura, 0.5);
+  }
+}
+
+// ── Cuerpo ─────────────────────────────────────────────
+.alojamientos-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.35em;
+  text-transform: uppercase; color: $verde-medio;
+  display: flex; align-items: center; gap: 12px; margin: 0 0 20px;
+
+  &::after {
+    content: ''; flex: 1; height: 0.5px;
+    background: $verde-claro; opacity: 0.5;
+  }
+}
+
+.intro-text {
+  font-size: 14px; font-weight: 300; color: $texto-muted;
+  line-height: 1.7; font-style: italic; margin: 0 0 36px;
+}
+
+// ── Lista ──────────────────────────────────────────────
+.alojamientos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ── Card ───────────────────────────────────────────────
+.alojamiento-card {
+  background: $crema;
+  border-radius: 20px;
+  border: 0.5px solid rgba(90, 110, 50, 0.15);
+  overflow: hidden;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: rgba(90, 110, 50, 0.35); }
+
+  &.destacado {
+    background: #eef3e5;
+    border-color: rgba(90, 110, 50, 0.3);
+  }
+}
+
+.badge-destacado {
+  background: $verde-oscuro;
+  color: $crema-oscura;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 8px 20px;
+  text-align: center;
+}
+
+.card-body {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px 28px 20px;
+
+  @media (max-width: 480px) {
+    padding: 20px;
+    gap: 14px;
+  }
+}
+
+.card-left { flex-shrink: 0; }
+
+.card-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: #e4ecda;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+
+  .destacado & { background: #d4e4c0; }
+}
+
+.card-info { flex: 1; }
+
+.card-meta {
+  display: flex; align-items: center;
+  gap: 12px; margin: 0 0 6px; flex-wrap: wrap;
+}
+
+.card-tipo {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: $verde-medio;
+}
+
+.card-distancia {
+  font-size: 11px; font-weight: 300;
+  color: $texto-muted;
+}
+
+.card-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 400;
+  color: $texto; margin: 0 0 4px;
+}
+
+.card-direccion {
+  font-size: 12px; font-weight: 300;
+  color: $texto-muted; margin: 0 0 10px;
+  letter-spacing: 0.04em;
+}
+
+.card-desc {
+  font-size: 13px; font-weight: 300;
+  color: $texto-muted; line-height: 1.6;
+  margin: 0; font-style: italic;
+}
+
+// ── Acciones ───────────────────────────────────────────
+.card-actions {
+  padding: 0 28px 24px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+
+  @media (max-width: 480px) { padding: 0 20px 20px; }
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 10px;
+  background: $verde-oscuro; color: $crema-oscura;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; border: none;
+  transition: background 0.2s;
+
+  &:hover { background: #3d4f24; }
+
+  svg { width: 14px; height: 14px; flex-shrink: 0; }
+}
+
+// ── CTA inferior ───────────────────────────────────────
+.footer-cta {
+  margin-top: 48px; text-align: center;
+  padding: 40px; background: $verde-oscuro;
+  border-radius: 16px; color: $crema-oscura;
+
+  p {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-style: italic;
+    margin: 0 0 6px; color: $crema-oscura;
+  }
+
+  span {
+    font-size: 12px; font-weight: 300;
+    color: rgba($crema-oscura, 0.45);
+    letter-spacing: 0.1em;
+  }
+}
+
+// ── Responsive ─────────────────────────────────────────
+@media (max-width: 600px) {
+  .alojamientos-body { padding: 40px 16px 60px; }
+  .card-nombre { font-size: 18px; }
+}

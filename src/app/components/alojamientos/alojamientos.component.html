@@ -1,0 +1,79 @@
+<div class="alojamientos-page">
+
+  <div class="alojamientos-hero">
+    <p class="eyebrow">05 · junio · 2027</p>
+    <h1 class="hero-title">Dónde <em>dormir</em></h1>
+    <p class="hero-sub">La Granja · Segovia</p>
+  </div>
+
+  <div class="alojamientos-body">
+    <div class="section-label">Alojamientos recomendados</div>
+
+    <p class="intro-text">
+      Os recomendamos reservar cuanto antes, especialmente en verano.
+      Todos están a pocos minutos de la finca.
+    </p>
+
+    <div class="alojamientos-list">
+      <div
+        *ngFor="let a of alojamientos"
+        class="alojamiento-card"
+        [class.destacado]="a.destacado"
+      >
+        <!-- Badge destacado -->
+        <div class="badge-destacado" *ngIf="a.destacado">
+          ⭐ Recomendado por los novios
+        </div>
+
+        <div class="card-body">
+          <div class="card-left">
+            <div class="card-icon">{{ a.icono }}</div>
+          </div>
+
+          <div class="card-info">
+            <div class="card-meta">
+              <span class="card-tipo">{{ a.tipo }}</span>
+              <span class="card-distancia">📍 {{ a.distancia }}</span>
+            </div>
+            <h2 class="card-nombre">{{ a.nombre }}</h2>
+            <p class="card-direccion">{{ a.direccion }}</p>
+            <p class="card-desc">{{ a.descripcion }}</p>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button
+            *ngIf="a.booking"
+            class="btn-primary"
+            (click)="abrirEnlace(a.booking!)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/>
+              <path d="M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Reservar en Booking
+          </button>
+          <button
+            *ngIf="a.web"
+            class="btn-primary"
+            (click)="abrirEnlace(a.web!)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/>
+              <path d="M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Ver web oficial
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-cta">
+      <p>¿Necesitas ayuda para reservar?</p>
+      <span>Escríbenos y te echamos una mano</span>
+    </div>
+
+  </div>
+</div>
