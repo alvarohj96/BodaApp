@@ -1,20 +1,20 @@
 <div class="app-wrapper">
 
-  <!-- Navbar fija y transparente como en la imagen -->
   <nav class="navbar" [class.menu-open]="menuAbierto">
-    <a routerLink="/" class="navbar-brand">Álvaro & Celia</a>
+    <a routerLink="/" class="navbar-brand" (click)="menuAbierto=false">Álvaro & Celia</a>
 
-    <button class="hamburger" (click)="toggleMenu()">☰</button>
+    <button class="hamburger" (click)="toggleMenu()">
+      <span [class.open]="menuAbierto">☰</span>
+    </button>
 
     <ul class="nav-links" [class.active]="menuAbierto">
-      <li><a routerLink="/horario"     routerLinkActive="active" (click)="menuAbierto=false">Horario</a></li>
-      <li><a routerLink="/mapa"      routerLinkActive="active" (click)="menuAbierto=false">Lugar</a></li>
-      <li><a routerLink="/alojamientos" routerLinkActive="active">Alojamientos</a></li>  <!-- ← nuevo -->
-      <li><a routerLink="/faq"       routerLinkActive="active" (click)="menuAbierto=false">FAQ</a></li>
+      <li><a routerLink="/horario"      routerLinkActive="active" (click)="menuAbierto=false">Horario</a></li>
+      <li><a routerLink="/mapa"         routerLinkActive="active" (click)="menuAbierto=false">Lugar</a></li>
+      <li><a routerLink="/alojamientos" routerLinkActive="active" (click)="menuAbierto=false">Alojamientos</a></li>
+      <li><a routerLink="/faq"          routerLinkActive="active" (click)="menuAbierto=false">FAQ</a></li>
     </ul>
   </nav>
 
-  <!-- Aquí se inyecta cada página -->
   <main>
     <router-outlet></router-outlet>
   </main>
