@@ -27,6 +27,8 @@ $claro:  #faf8f5;
 
   // Efecto parallax suave (opcional, actívalo en el .ts con HostListener)
   will-change: transform;
+
+  @media (max-width: 640px) { background-image: url('../../../assets/asturias-plaza.png') }
 }
 
 .hero-overlay {
