@@ -58,11 +58,8 @@ $texto-muted:   #5a5a4a;
   }
 
   .hero-sub {
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    color: rgba($crema-oscura, 0.5);
-    margin: 0;
+    font-size: 13px; font-weight: 300; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba($crema-oscura, 0.5);
   }
 }
 
