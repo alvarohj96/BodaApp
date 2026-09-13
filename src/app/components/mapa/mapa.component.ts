@@ -28,9 +28,8 @@ export class MapaComponent {
   };
 
   readonly info = [
-    { icono: '🕛', titulo: 'Hora de llegada',  texto: '12:00 — Puntualidad apreciada, retrasos tolerados con amor' },
-    { icono: '🚗', titulo: 'Cómo llegar',      texto: 'A 1h de Madrid por la A-6 y AP-61. En GPS escribe "La Real Fábrica de Cristales"' },
-    { icono: '🅿️', titulo: 'Parking',          texto: 'Paseo Fuente del Príncipe. Gratuito, abierto 24h, a 300m del recinto' },
+    { icono: '🕛', titulo: 'Hora de llegada',  texto: '12:30 — Puntualidad apreciada.' },
+    { icono: '🚗', titulo: 'Cómo llegar',      texto: 'A 1h de Madrid por la A-6 y AP-61. En GPS escribe "La Real Fábrica de Cristales"' }
   ];
 
   abrirMapa(url: string): void {
