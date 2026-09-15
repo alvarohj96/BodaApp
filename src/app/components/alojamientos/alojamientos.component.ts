@@ -6,7 +6,6 @@ interface Alojamiento {
   tipo:        string;
   direccion:   string;
   distancia:   string;
-  descripcion: string;
   icono:       string;
   destacado:   boolean;
   booking?:    string;
@@ -29,7 +28,6 @@ export class AlojamientosComponent {
       tipo:        'Hotel',
       direccion:   'La Granja, Segovia',
       distancia:   'A 5 min de la finca',
-      descripcion: 'Opción perfecta para los que quieren dormir cerca y llegar frescos al día siguiente.',
       icono:       '🏡',
       destacado:   false,
       booking:     'https://www.booking.com',
@@ -39,7 +37,6 @@ export class AlojamientosComponent {
       tipo:        'Hotel',
       direccion:   'La Granja, Segovia',
       distancia:   'A 2 min de la finca',
-      descripcion: 'El más cercano a la Real Fábrica. Muy recomendado por los novios para no tener que madrugar.',
       icono:       '⭐',
       destacado:   true,
       booking:     'https://www.booking.com',
@@ -49,7 +46,6 @@ export class AlojamientosComponent {
       tipo:        'Parador Nacional',
       direccion:   'La Granja, Segovia',
       distancia:   'A 10 min de la finca',
-      descripcion: 'Para los que quieren vivir la experiencia completa con toda la elegancia de un Parador.',
       icono:       '🏰',
       destacado:   false,
       web:         'https://www.parador.es',

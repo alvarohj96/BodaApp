@@ -36,12 +36,12 @@ export class FaqComponent {
     },
     {
       pregunta: '¿A qué hora termina la fiesta?',
-      respuesta: 'Cuando el DJ se canse o los novios huyamos. <strong>Lo que ocurra primero.</strong> Aunque, siendo realistas, la música dejará de sonar sobre las 23:30. ¡Hay que darlo todo antes de que nos echen!',      
+      respuesta: 'La música dejará de sonar sobre las 23:30. <strong>¡Hay que darlo todo antes de que nos echen!</strong>',      
       abierto: false
     },
     {
       pregunta: '¿Habrá bus?',
-      respuesta: 'Estamos estudiando poner un autobús, pero depende de vosotros. Si sois suficientes los que preferís brindar sin miedo al control de alcoholemia, ¡lo pondremos! Dínoslo al confirmar. Si acabamos siendo cuatro gatos, nos tocará compartir taxi o venir en patinete.',
+      respuesta: 'Estamos estudiando poner un autobús, pero depende de vosotros. Si sois suficientes los que preferís brindar sin miedo al control de alcoholemia, ¡lo pondremos! Dínoslo al confirmar.',
       abierto: false
     },
     {
