@@ -13,9 +13,12 @@ export interface FaqItem {
   emoji: string;
 }
 
+export type PlatoPrincipal = 'carne' | 'pescado';
+
 export interface RsvpForm {
   nombre: string;
-  asistencia: 'si' | 'no' | 'quizas';
+  asistencia: 'si' | 'no';
+  platoPrincipal?: PlatoPrincipal;
   numeroPax: number;
   restriccionAlimentaria: string;
   mensaje: string;

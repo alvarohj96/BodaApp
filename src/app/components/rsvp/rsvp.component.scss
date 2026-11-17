@@ -177,7 +177,7 @@ $oro: #a8ba8c;
 // ── Grid de asistencia ─────────────────────────────────
 .asistencia-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 
   @media (max-width: 400px) {
@@ -236,8 +236,12 @@ $oro: #a8ba8c;
     background: #f5e8e8;
   }
 
-  &.icon-quiza {
-    background: #f5f0e0;
+  &.icon-carne {
+    background: #f5e8e8;
+  }
+
+  &.icon-pescado {
+    background: #e8eef5;
   }
 
   &.icon-tarde {

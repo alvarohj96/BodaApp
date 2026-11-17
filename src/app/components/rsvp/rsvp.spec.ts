@@ -12,8 +12,7 @@ export class RsvpComponent {
 
   opciones = [
     { valor: 'si',     emoji: '🎉', texto: '¡Cuenten conmigo, ya estoy eligiendo el outfit!' },
-    { valor: 'no',     emoji: '😿', texto: 'Lo siento, tengo que lavar a mi gato.' },
-    { valor: 'quizas', emoji: '🤷', texto: 'Depende del horóscopo, te confirmo en mayo.' }
+    { valor: 'no',     emoji: '😿', texto: 'Lo siento, tengo que lavar a mi gato.' }
   ];
 
   constructor(private fb: FormBuilder) {

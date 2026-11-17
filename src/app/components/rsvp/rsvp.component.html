@@ -91,6 +91,24 @@
             </span>
           </div>
 
+          <!-- Plato principal invitado principal (solo si asiste) -->
+          <div class="form-group" [formGroup]="form" *ngIf="form.get('asistencia')?.value === 'si'">
+            <label class="form-label">Plato principal</label>
+            <div class="asistencia-grid">
+              <div class="asistencia-option" *ngFor="let op of opcionesPlato">
+                <input type="radio" [id]="'p-'+op.value" formControlName="platoPrincipal" [value]="op.value">
+                <label class="asistencia-label" [for]="'p-'+op.value">
+                  <span class="asistencia-icon" [ngClass]="op.iconClass">{{ op.icon }}</span>
+                  <span class="asistencia-title">{{ op.title }}</span>
+                  <span class="asistencia-sub">{{ op.sub }}</span>
+                </label>
+              </div>
+            </div>
+            <span class="form-error" *ngIf="form.get('platoPrincipal')?.invalid && form.get('platoPrincipal')?.touched">
+              ¡Elige carne o pescado! 🍽️
+            </span>
+          </div>
+
           <!-- Alergias invitado principal -->
           <div class="form-group" [formGroup]="form">
             <label class="form-label">Restricciones alimentarias</label>
@@ -153,6 +171,24 @@
                 <span class="form-error"
                   *ngIf="formAcompanante.get('asistencia')?.invalid && formAcompanante.get('asistencia')?.touched">
                   ¡Dinos si viene o no! 😄
+                </span>
+              </div>
+
+              <!-- Plato principal acompañante (solo si asiste) -->
+              <div class="form-group" [formGroup]="formAcompanante" *ngIf="formAcompanante.get('asistencia')?.value === 'si'">
+                <label class="form-label">Plato principal de {{ invitadoSeleccionado.nombreAcompanante }}</label>
+                <div class="asistencia-grid">
+                  <div class="asistencia-option" *ngFor="let op of opcionesPlato">
+                    <input type="radio" [id]="'pc-'+op.value" formControlName="platoPrincipal" [value]="op.value">
+                    <label class="asistencia-label" [for]="'pc-'+op.value">
+                      <span class="asistencia-icon" [ngClass]="op.iconClass">{{ op.icon }}</span>
+                      <span class="asistencia-title">{{ op.title }}</span>
+                      <span class="asistencia-sub">{{ op.sub }}</span>
+                    </label>
+                  </div>
+                </div>
+                <span class="form-error" *ngIf="formAcompanante.get('platoPrincipal')?.invalid && formAcompanante.get('platoPrincipal')?.touched">
+                  ¡Elige carne o pescado para tu acompañante! 🍽️
                 </span>
               </div>
 

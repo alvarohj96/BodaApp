@@ -4,6 +4,7 @@ import { Observable, from } from 'rxjs';
 export interface RsvpData {
   nombre:        string;
   asistencia:    string;
+  platoPrincipal: string;
   restricciones: string[];
   mensaje:       string;
   ninos:         number;
@@ -12,7 +13,7 @@ export interface RsvpData {
 @Injectable({ providedIn: 'root' })
 export class RsvpService {
 
-  private readonly SHEET_URL = 'https://script.google.com/macros/s/AKfycbwV6rO_l6rwimgd5dZKjYmlsrYQrfJtPbB7mt8tDE4uBPnHAmoYe1QlOny744eH-G6q/exec';
+  private readonly SHEET_URL = 'https://script.google.com/macros/s/AKfycbylWmwS436f5bahrLUxIjDH01UE9whq_pxjVknWxQl7dBQeWmZpOpRsA4axi7S7f8Gn/exec';
 
   enviarRsvpRaw(data: Record<string, string>): Observable<any> {
     // Usamos un <form> invisible que hace submit directo a Google

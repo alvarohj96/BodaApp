@@ -33,6 +33,7 @@ export class RsvpComponent implements OnDestroy {
   rellenarAcompanante = false;
   estado: 'idle' | 'enviando' | 'enviado' | 'error' = 'idle';
   private sub: Subscription | null = null;
+  private subs = new Subscription();
 
   alergias = [
     { id: 'vegetariano', label: 'Vegetariano' },
@@ -47,13 +48,16 @@ export class RsvpComponent implements OnDestroy {
   opcionesAsistencia = [
     { value: 'si', icon: '🎉', title: '¡Allí estaré!', sub: 'Ya estoy eligiendo el outfit', iconClass: 'icon-si' },
     { value: 'no', icon: '😿', title: 'No puedo ir', sub: 'Tengo que lavar a mi gato', iconClass: 'icon-no' },
-    { value: 'quiza', icon: '🤷', title: 'Quizás...', sub: 'Depende del horóscopo', iconClass: 'icon-quiza' },
+  ];
+
+  opcionesPlato = [
+    { value: 'carne', icon: '🥩', title: 'Carne', sub: 'Para los carnívoros', iconClass: 'icon-carne' },
+    { value: 'pescado', icon: '🐟', title: 'Pescado', sub: 'Del mar a tu plato', iconClass: 'icon-pescado' },
   ];
 
   mensajesExito: Record<string, string> = {
     si: 'Nos alegramos muchísimo de que vengas. Ya puedes ir eligiendo el outfit.',
     no: 'Lo entendemos. Esperamos que el gato quede muy limpio.',
-    quiza: 'Entendido. El horóscopo tiene la última palabra.',
   };
 
   get mensajeExito(): string {
@@ -67,15 +71,53 @@ export class RsvpComponent implements OnDestroy {
   ) {
     this.form = this.fb.group({
       asistencia: ['', Validators.required],
+      platoPrincipal: [''],
       restricciones: [[]],
       mensaje: [''],
     });
 
     this.formAcompanante = this.fb.group({
       asistencia: ['', Validators.required],
+      platoPrincipal: [''],
       restricciones: [[]],
       mensaje: [''],
     });
+
+    this.vincularPlatoConAsistencia(this.form);
+    this.vincularPlatoConAsistencia(this.formAcompanante);
+  }
+
+  /**
+   * El plato principal solo es obligatorio si la persona asiste ("si").
+   * Si cambia a "no", se limpia la elección y se quita la validación.
+   */
+  private vincularPlatoConAsistencia(group: FormGroup): void {
+    const asistencia = group.get('asistencia')!;
+    const plato = group.get('platoPrincipal')!;
+
+    this.subs.add(
+      asistencia.valueChanges.subscribe(valor => {
+        if (valor === 'si') {
+          plato.setValidators([Validators.required]);
+        } else {
+          plato.clearValidators();
+          plato.setValue('', { emitEvent: false });
+          plato.markAsUntouched();
+        }
+        plato.updateValueAndValidity({ emitEvent: false });
+      })
+    );
+  }
+
+  private readonly valoresIniciales = {
+    asistencia: '',
+    platoPrincipal: '',
+    restricciones: [] as string[],
+    mensaje: '',
+  };
+
+  private platoSiAsiste(group: FormGroup): string {
+    return group.value.asistencia === 'si' ? (group.value.platoPrincipal ?? '') : '';
   }
 
   // ── Buscador ─────────────────────────────────────────
@@ -120,8 +162,8 @@ export class RsvpComponent implements OnDestroy {
     this.busqueda = '';
     this.sugerencias = [];
     this.mostrarSugerencias = false;
-    this.form.reset();
-    this.formAcompanante.reset();
+    this.form.reset({ ...this.valoresIniciales });
+    this.formAcompanante.reset({ ...this.valoresIniciales });
     this.rellenarAcompanante = false;
     this.cdr.detectChanges();
   }
@@ -168,12 +210,16 @@ export class RsvpComponent implements OnDestroy {
       invitadoId: this.invitadoSeleccionado.id,
       nombre: `${this.invitadoSeleccionado.nombre} ${this.invitadoSeleccionado.apellidos}`,
       asistencia: this.form.value.asistencia,
+      platoPrincipal: this.platoSiAsiste(this.form),
       restricciones: this.form.value.restricciones.join(', ') || 'Ninguna',
       mensaje: this.form.value.mensaje ?? '',
       acompanante: this.invitadoSeleccionado.nombreAcompanante ?? '',  // ← ?? '' en lugar de undefined
       acompananteAsiste: this.rellenarAcompanante
         ? this.formAcompanante.value.asistencia
         : 'no confirmado',
+      acompanantePlato: this.rellenarAcompanante
+        ? this.platoSiAsiste(this.formAcompanante)
+        : '',
       acompananteAlerg: this.rellenarAcompanante
         ? (this.formAcompanante.value.restricciones.join(', ') || 'Ninguna')
         : '',
@@ -190,5 +236,6 @@ export class RsvpComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    this.subs.unsubscribe();
   }
 }
