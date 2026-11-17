@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { RsvpService } from '../../services/rsvp.service';
 import { Invitado } from '../../models/wedding.models';
 import { INVITADOS } from '../../data/guests.data';
+import { Sugerencia, buscarSugerencias } from '../../utils/busqueda-invitados';
 
 @Component({
   selector: 'app-rsvp',
@@ -23,7 +24,16 @@ export class RsvpComponent implements OnDestroy {
 
   // ── Estado del buscador ──────────────────────────────
   busqueda = '';
-  sugerencias: Invitado[] = [];
+  sugerencias: Sugerencia[] = [];
+  /** Grupo (invitación) real del que forma parte la persona seleccionada. */
+  grupoSeleccionado: Invitado | null = null;
+  /** True si la persona que ha buscado su nombre es el acompañante del grupo. */
+  esAcompanante = false;
+  /**
+   * Persona que rellena el formulario. Si busca el invitado principal es el propio
+   * grupo; si busca al acompañante, es una vista con el acompañante como titular y
+   * el invitado principal como "otra persona" opcional del grupo.
+   */
   invitadoSeleccionado: Invitado | null = null;
   mostrarSugerencias = false;
 
@@ -59,6 +69,11 @@ export class RsvpComponent implements OnDestroy {
     si: 'Nos alegramos muchísimo de que vengas. Ya puedes ir eligiendo el outfit.',
     no: 'Lo entendemos. Esperamos que el gato quede muy limpio.',
   };
+
+  /** Cómo llamar en el formulario a la otra persona del grupo. */
+  get etiquetaOtro(): string {
+    return this.esAcompanante ? 'invitado principal' : 'acompañante';
+  }
 
   get mensajeExito(): string {
     return this.mensajesExito[this.form.get('asistencia')?.value] ?? '';
@@ -125,24 +140,31 @@ export class RsvpComponent implements OnDestroy {
     const valor = (event.target as HTMLInputElement).value.trim();
     this.busqueda = valor;
     this.invitadoSeleccionado = null;
+    this.grupoSeleccionado = null;
+    this.esAcompanante = false;
 
-    if (valor.length < 2) {
-      this.sugerencias = [];
-      this.mostrarSugerencias = false;
-      return;
-    }
-
-    // Filtra solo por nombre (no apellidos) para no revelar la lista completa
-    const nombreBusqueda = valor.toLowerCase();
-    this.sugerencias = INVITADOS.filter(i =>
-      i.nombre.toLowerCase().startsWith(nombreBusqueda)
-    );
+    // Busca por nombre de pila del invitado o de su acompañante (sin tildes ni
+    // mayúsculas) y no por apellidos, para no revelar la lista completa
+    this.sugerencias = buscarSugerencias(INVITADOS, valor);
     this.mostrarSugerencias = this.sugerencias.length > 0;
   }
 
-  seleccionarInvitado(invitado: Invitado): void {
-    this.invitadoSeleccionado = invitado;
-    this.busqueda = `${invitado.nombre} ${invitado.apellidos}`;
+  seleccionarSugerencia(sugerencia: Sugerencia): void {
+    const grupo = sugerencia.invitado;
+    this.grupoSeleccionado = grupo;
+    this.esAcompanante = sugerencia.tipo === 'acompanante';
+
+    this.invitadoSeleccionado = this.esAcompanante
+      ? {
+          id: grupo.id,
+          nombre: grupo.nombreAcompanante!,
+          apellidos: '',
+          tieneAcompanante: true,
+          nombreAcompanante: `${grupo.nombre} ${grupo.apellidos}`.trim(),
+        }
+      : grupo;
+
+    this.busqueda = `${this.invitadoSeleccionado.nombre} ${this.invitadoSeleccionado.apellidos}`.trim();
     this.mostrarSugerencias = false;
     this.sugerencias = [];
     this.rellenarAcompanante = false;
@@ -159,6 +181,8 @@ export class RsvpComponent implements OnDestroy {
 
   limpiarSeleccion(): void {
     this.invitadoSeleccionado = null;
+    this.grupoSeleccionado = null;
+    this.esAcompanante = false;
     this.busqueda = '';
     this.sugerencias = [];
     this.mostrarSugerencias = false;
@@ -197,7 +221,7 @@ export class RsvpComponent implements OnDestroy {
   }
 
   enviar(): void {
-    if (!this.invitadoSeleccionado) return;
+    if (!this.invitadoSeleccionado || !this.grupoSeleccionado) return;
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     if (this.rellenarAcompanante && this.formAcompanante.invalid) {
       this.formAcompanante.markAllAsTouched(); return;
@@ -206,26 +230,33 @@ export class RsvpComponent implements OnDestroy {
     this.estado = 'enviando';
     this.cdr.detectChanges();
 
+    const grupo = this.grupoSeleccionado;
+
+    // `form` es siempre quien ha buscado su nombre y `formAcompanante` la otra
+    // persona del grupo (opcional). Se reasigna a invitado principal / acompañante
+    // para que el payload mantenga siempre la misma estructura (una fila por grupo).
+    const formPrincipal = this.esAcompanante
+      ? (this.rellenarAcompanante ? this.formAcompanante : null)
+      : this.form;
+    const formAcomp = this.esAcompanante
+      ? this.form
+      : (this.rellenarAcompanante ? this.formAcompanante : null);
+
+    const restricciones = (f: FormGroup) => f.value.restricciones.join(', ') || 'Ninguna';
+
     const payload: Record<string, string> = {
-      invitadoId: this.invitadoSeleccionado.id,
-      nombre: `${this.invitadoSeleccionado.nombre} ${this.invitadoSeleccionado.apellidos}`,
-      asistencia: this.form.value.asistencia,
-      platoPrincipal: this.platoSiAsiste(this.form),
-      restricciones: this.form.value.restricciones.join(', ') || 'Ninguna',
-      mensaje: this.form.value.mensaje ?? '',
-      acompanante: this.invitadoSeleccionado.nombreAcompanante ?? '',  // ← ?? '' en lugar de undefined
-      acompananteAsiste: this.rellenarAcompanante
-        ? this.formAcompanante.value.asistencia
-        : 'no confirmado',
-      acompanantePlato: this.rellenarAcompanante
-        ? this.platoSiAsiste(this.formAcompanante)
-        : '',
-      acompananteAlerg: this.rellenarAcompanante
-        ? (this.formAcompanante.value.restricciones.join(', ') || 'Ninguna')
-        : '',
-      acompanantemensaje: this.rellenarAcompanante
-        ? (this.formAcompanante.value.mensaje ?? '')
-        : '',
+      invitadoId: grupo.id,
+      nombre: `${grupo.nombre} ${grupo.apellidos}`,
+      asistencia: formPrincipal ? formPrincipal.value.asistencia : 'no confirmado',
+      platoPrincipal: formPrincipal ? this.platoSiAsiste(formPrincipal) : '',
+      restricciones: formPrincipal ? restricciones(formPrincipal) : '',
+      mensaje: formPrincipal ? (formPrincipal.value.mensaje ?? '') : '',
+      acompanante: grupo.nombreAcompanante ?? '',  // ← ?? '' en lugar de undefined
+      acompananteAsiste: formAcomp ? formAcomp.value.asistencia : 'no confirmado',
+      acompanantePlato: formAcomp ? this.platoSiAsiste(formAcomp) : '',
+      acompananteAlerg: formAcomp ? restricciones(formAcomp) : '',
+      acompanantemensaje: formAcomp ? (formAcomp.value.mensaje ?? '') : '',
+      respondePor: this.esAcompanante ? 'acompanante' : 'principal',
     };
 
     this.sub = this.rsvpService.enviarRsvpRaw(payload).subscribe({

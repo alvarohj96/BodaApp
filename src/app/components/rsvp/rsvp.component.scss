@@ -594,6 +594,7 @@ $oro: #a8ba8c;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 12px 16px;
   cursor: pointer;
   transition: background 0.15s;
@@ -613,6 +614,7 @@ $oro: #a8ba8c;
     font-weight: 300;
     color: $texto-muted;
     font-style: italic;
+    text-align: right;
   }
 }
 

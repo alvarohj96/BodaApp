@@ -38,11 +38,19 @@
 
             <!-- Desplegable de sugerencias -->
             <div class="sugerencias" *ngIf="mostrarSugerencias">
-              <div class="sugerencia-item" *ngFor="let inv of sugerencias" (mousedown)="seleccionarInvitado(inv)">
-                <span class="sug-nombre">{{ inv.nombre }} {{ inv.apellidos }}</span>
-                <span class="sug-acomp" *ngIf="inv.tieneAcompanante">
-                  + {{ inv.nombreAcompanante }}
-                </span>
+              <div class="sugerencia-item" *ngFor="let s of sugerencias" (mousedown)="seleccionarSugerencia(s)">
+                <ng-container *ngIf="s.tipo === 'principal'; else coincideAcompanante">
+                  <span class="sug-nombre">{{ s.invitado.nombre }} {{ s.invitado.apellidos }}</span>
+                  <span class="sug-acomp" *ngIf="s.invitado.tieneAcompanante">
+                    + {{ s.invitado.nombreAcompanante }}
+                  </span>
+                </ng-container>
+                <ng-template #coincideAcompanante>
+                  <span class="sug-nombre">{{ s.invitado.nombreAcompanante }}</span>
+                  <span class="sug-acomp">
+                    + {{ s.invitado.nombre }} {{ s.invitado.apellidos }}
+                  </span>
+                </ng-template>
               </div>
               <div class="sugerencias-empty" *ngIf="sugerencias.length === 0">
                 No encontramos ese nombre
@@ -68,7 +76,7 @@
                 {{ invitadoSeleccionado.nombre }} {{ invitadoSeleccionado.apellidos }}
               </p>
               <p class="invitado-sub" *ngIf="invitadoSeleccionado.tieneAcompanante">
-                Con acompañante: {{ invitadoSeleccionado.nombreAcompanante }}
+                {{ esAcompanante ? 'Con acompañante:' : 'Con acompañante:' }} {{ invitadoSeleccionado.nombreAcompanante }}
               </p>
             </div>
           </div>
@@ -131,7 +139,7 @@
 
             <div class="acomp-divider">
               <div class="acomp-divider-line"></div>
-              <span class="acomp-divider-label">Acompañante</span>
+              <span class="acomp-divider-label">{{ esAcompanante ? 'Invitado principal' : 'Acompañante' }}</span>
               <div class="acomp-divider-line"></div>
             </div>
 
@@ -149,7 +157,7 @@
                 <span class="toggle-thumb"></span>
               </label>
               <span class="toggle-label">
-                {{ rellenarAcompanante ? 'Rellenando datos' : 'Rellenar datos del acompañante' }}
+                {{ rellenarAcompanante ? 'Rellenando datos' : 'Rellenar datos del ' + etiquetaOtro }}
               </span>
             </div>
 
@@ -188,7 +196,7 @@
                   </div>
                 </div>
                 <span class="form-error" *ngIf="formAcompanante.get('platoPrincipal')?.invalid && formAcompanante.get('platoPrincipal')?.touched">
-                  ¡Elige carne o pescado para tu acompañante! 🍽️
+                  ¡Elige carne o pescado para {{ invitadoSeleccionado.nombreAcompanante }}! 🍽️
                 </span>
               </div>
 
@@ -203,7 +211,7 @@
 
               <!-- Mensaje acompañante -->
               <div class="form-group" [formGroup]="formAcompanante">
-                <label class="form-label">¿Algo más del acompañante?</label>
+                <label class="form-label">¿Algo más del {{ etiquetaOtro }}?</label>
                 <textarea class="form-textarea" formControlName="mensaje"
                   placeholder="Necesidades especiales, alergias no listadas...">
                 </textarea>
