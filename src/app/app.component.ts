@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { SobreBienvenidaComponent } from './components/sobre-bienvenida/sobre-bienvenida.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet],
+  imports: [CommonModule, RouterModule, RouterOutlet, SobreBienvenidaComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

@@ -1,0 +1,349 @@
+// ── Paleta ─────────────────────────────────────────────
+$oliva: #87963f;
+$oliva-claro: #9bab52;
+$oliva-oscuro: #66742c;
+$oliva-sombra: #4f5b21;
+
+$oro-claro: #f6e08c;
+$oro: #e0b246;
+$oro-medio: #c4952a;
+$oro-oscuro: #8f6614;
+
+:host {
+  display: contents;
+}
+
+// ── Overlay a pantalla completa ────────────────────────
+.sobre-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000; // por encima de la navbar (1000)
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Lato', sans-serif;
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.9) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(170, 165, 150, 0.25) 0%, transparent 50%),
+    linear-gradient(135deg, #f7f5ee 0%, #ece7da 100%); // aire de mármol claro
+  transition: opacity 0.9s ease;
+
+  &.saliendo {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.sobre-escena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.4, 1);
+  animation: aparecer 1s ease backwards;
+
+  .saliendo & {
+    transform: scale(1.35) translateY(6%); // sensación de "entrar" en el sobre
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+// ── Sobre ──────────────────────────────────────────────
+.sobre {
+  position: relative;
+  width: min(88vw, 640px);
+  aspect-ratio: 3 / 2;
+  perspective: 1400px;
+  container-type: inline-size; // permite tamaños proporcionales (cqw) para textos y sello
+}
+
+.sobre-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 3px;
+  background: $oliva-oscuro;
+  box-shadow: 0 24px 48px rgba(60, 70, 20, 0.35), 0 4px 10px rgba(60, 70, 20, 0.25);
+}
+
+// Pliegues frontales (triángulos laterales + inferior)
+.pliegue {
+  position: absolute;
+  z-index: 3;
+}
+
+.pliegue-izq {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 52%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  background: linear-gradient(100deg, $oliva-oscuro 0%, $oliva 100%);
+}
+
+.pliegue-der {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 52%;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  background: linear-gradient(260deg, $oliva-oscuro 0%, $oliva-claro 100%);
+}
+
+.pliegue-inf {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  background: linear-gradient(0deg, $oliva-claro 0%, $oliva 100%);
+}
+
+// Solapa superior: el wrapper rota y lleva la sombra; el hijo recorta el triángulo
+.solapa-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58%;
+  z-index: 5;
+  transform-origin: top center;
+  filter: drop-shadow(0 6px 5px rgba(40, 50, 10, 0.35));
+}
+
+.solapa {
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(170deg, $oliva-claro 0%, $oliva 60%, $oliva-oscuro 100%);
+}
+
+// ── Carta ──────────────────────────────────────────────
+.carta {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 10%;
+  bottom: 6%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  padding-top: 7%;
+  text-align: center;
+  color: $oliva-oscuro;
+  background: linear-gradient(180deg, #fffdf7, #f3eedf);
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carta-eyebrow {
+  font-size: clamp(9px, 2.1cqw, 12px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.carta-nombres {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(16px, 5.4cqw, 34px);
+  line-height: 1.1;
+
+  em {
+    color: $oro-medio;
+  }
+}
+
+.carta-fecha {
+  font-size: clamp(9px, 2.1cqw, 12px);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+// ── Sello de cera dorada ───────────────────────────────
+.sello {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 58%; // en la punta de la solapa
+  width: 18%;
+  aspect-ratio: 1;
+  margin: -9% 0 0 -9%; // centrado (los % de margin se calculan sobre el ancho)
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  appearance: none;
+  font: inherit;
+  border-radius: 52% 48% 50% 50% / 50% 52% 48% 50%; // borde irregular de cera
+  background: radial-gradient(
+    circle at 32% 28%,
+    $oro-claro 0%,
+    $oro 38%,
+    $oro-medio 72%,
+    $oro-oscuro 100%
+  );
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1.5px rgba(143, 102, 20, 0.45);
+  transition: transform 0.25s ease;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 4px;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  // Aro pulsante que invita a pulsar
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4%;
+    border-radius: 50%;
+    border: 2px solid rgba($oro, 0.75);
+    animation: latido 2.2s ease-out infinite;
+    pointer-events: none;
+  }
+}
+
+.sello-borde {
+  position: absolute;
+  inset: 13%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  // Anillo en relieve
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 245, 190, 0.7),
+    inset -2px -2px 3px rgba(120, 80, 10, 0.55),
+    1px 1px 1px rgba(255, 235, 150, 0.5),
+    -1px -1px 2px rgba(120, 80, 10, 0.4);
+}
+
+.sello-iniciales {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(14px, 4.5vw, 26px); // fallback
+  font-size: 5.2cqw;
+  line-height: 1;
+  color: $oro;
+  // Letras "grabadas": luz arriba-izquierda, sombra abajo-derecha
+  text-shadow:
+    -1px -1px 1px rgba(255, 245, 190, 0.85),
+    1px 1px 1px rgba(110, 70, 5, 0.75);
+}
+
+@keyframes latido {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+// ── Pista ──────────────────────────────────────────────
+.sobre-pista {
+  margin-top: clamp(1.5rem, 5vh, 2.5rem);
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $oliva-oscuro;
+  opacity: 0.8;
+  transition: opacity 0.4s;
+}
+
+// ── Secuencia de apertura ──────────────────────────────
+.abriendo {
+  .sello {
+    animation: romper-sello 0.6s ease-out forwards;
+
+    &::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  .solapa-wrap {
+    animation: abrir-solapa 0.85s 0.15s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+  }
+
+  .carta {
+    animation: sacar-carta 0.9s 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+  }
+
+  .sobre-pista {
+    opacity: 0;
+  }
+}
+
+@keyframes romper-sello {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+@keyframes abrir-solapa {
+  0% {
+    transform: rotateX(0deg);
+    z-index: 5;
+  }
+  49% {
+    z-index: 5;
+  }
+  50% {
+    z-index: 1; // al pasar de la vertical, la solapa queda por detrás de la carta
+  }
+  100% {
+    transform: rotateX(180deg);
+    z-index: 1;
+    filter: drop-shadow(0 -4px 4px rgba(40, 50, 10, 0.2)) brightness(0.82);
+  }
+}
+
+@keyframes sacar-carta {
+  to {
+    transform: translateY(-62%);
+  }
+}
+
+// ── Accesibilidad: sin movimiento, solo fundido ────────
+@media (prefers-reduced-motion: reduce) {
+  .sobre-escena,
+  .solapa-wrap,
+  .carta,
+  .sello,
+  .sello::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .sobre-overlay {
+    transition-duration: 0.4s;
+  }
+}

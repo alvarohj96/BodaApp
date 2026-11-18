@@ -1,0 +1,44 @@
+@if (estado() !== 'fuera') {
+  <div
+    class="sobre-overlay"
+    [class.abriendo]="estado() === 'abriendo'"
+    [class.saliendo]="estado() === 'saliendo'"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Invitación de boda de Álvaro y Celia"
+  >
+    <div class="sobre-escena">
+      <div class="sobre">
+        <div class="sobre-fondo"></div>
+
+        <!-- Carta que asoma al abrir -->
+        <div class="carta">
+          <span class="carta-eyebrow">Estáis invitados</span>
+          <span class="carta-nombres">Álvaro <em>&amp;</em> Celia</span>
+          <span class="carta-fecha">05 · junio · 2027</span>
+        </div>
+
+        <!-- Pliegues frontales del sobre -->
+        <div class="pliegue pliegue-izq"></div>
+        <div class="pliegue pliegue-der"></div>
+        <div class="pliegue pliegue-inf"></div>
+
+        <!-- Solapa triangular superior -->
+        <div class="solapa-wrap"><div class="solapa"></div></div>
+
+        <!-- Sello de cera -->
+        <button
+          type="button"
+          class="sello"
+          (click)="abrir()"
+          [disabled]="estado() !== 'cerrado'"
+          aria-label="Abrir la invitación"
+        >
+          <span class="sello-borde"><span class="sello-iniciales">A&amp;C</span></span>
+        </button>
+      </div>
+
+      <p class="sobre-pista">Toca el sello para abrir</p>
+    </div>
+  </div>
+}
